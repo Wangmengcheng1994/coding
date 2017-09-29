@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:hsf="http://www.taobao.com/hsf"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.taobao.com/hsf
+       http://www.taobao.com/hsf/hsf.xsd"
+	default-autowire="byName">
+
+	<!-- 服务消费者 -->
+	<bean id="msgService" class="com.taobao.hsf.app.spring.util.HSFSpringConsumerBean"
+		init-method="init">
+		<property name="interfaceName">
+			<value>com.foresee.service.MsgService</value>
+		</property>
+		<property name="version">
+			<value>1.0.0</value>
+		</property>
+		<property name="group">
+			<value>ForeseeMsgGroup</value>
+		</property>
+	</bean>
+	
+
+</beans>
