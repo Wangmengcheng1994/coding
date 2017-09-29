@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd ">
+	
+	<!-- 配置目标对象 -->
+	<bean name="userService" class="cn.itcast.service.UserServiceImpl" ></bean>
+	<!-- 配置通知对象 -->
+	<bean name="myAdvice" class="cn.itcast.d_springaop.MyAdvice" ></bean>
+	<!-- 配置织入(将通知织入目标对象) -->
+	<!-- 切点表达式:
+		public void cn.itcast.service.UserServiceImpl.save()
+		void cn.itcast.service.UserServiceImpl.save()  默认就是public
+		* cn.itcast.service.UserServiceImpl.save() 返回值不做要求
+		* cn.itcast.service.*ServiceImpl.save() 所有以ServiceImpl结尾的类
+		* cn.itcast.service.*ServiceImpl.*()针对所有方法名,参数列表为空的方法 都织入通知
+		* cn.itcast.service..*ServiceImpl.*(..) 包含当前包以及子孙包
+		 -->
+	<aop:config>
+		<!-- 配置切点 -->
+		<aop:pointcut expression="execution(* cn.itcast.service.*ServiceImpl.*())" id="myPC"/>
+		<!-- 指定切面 -->
+		<aop:aspect ref="myAdvice" >
+			<!-- 前置通知 
+					将myAdvice通知对象中的before方法作为前置通知,织入到myPC切点中.
+			-->
+			<aop:before method="before" pointcut-ref="myPC" />
+			<!-- 环绕通知 -->
+			<aop:around method="around" pointcut-ref="myPC" />
+			<!-- 后置通知(出现异常不执行) -->
+			<aop:after-returning method="afterReturning" pointcut-ref="myPC" />
+			<!-- 后置通知(出现异常依然执行) -->
+			<aop:after method="after" pointcut-ref="myPC" />
+			<!-- 异常拦截通知 -->
+			<aop:after-throwing method="afterThrowing" pointcut-ref="myPC" />
+		</aop:aspect>
+	</aop:config>
+</beans>
